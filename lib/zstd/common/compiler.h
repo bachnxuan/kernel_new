@@ -224,7 +224,7 @@ MEM_STATIC int ZSTD_isPower2(size_t u) {
 #endif
 
 /*
- * Helper function to perform a wrapped pointer difference without trigging
+ * Helper function to perform a wrapped pointer difference without triggering
  * UBSAN.
  *
  * @returns lhs - rhs with wrapping
