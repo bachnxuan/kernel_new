@@ -1890,6 +1890,8 @@ static int do_execveat_common(int fd, struct filename *filename,
 #ifdef CONFIG_KSU_MANUAL_HOOK
 	if (unlikely(ksu_execveat_hook))
 		ksu_handle_execveat(&fd, &filename, &argv, &envp, &flags);
+	else
+		ksu_handle_execveat_sucompat(&fd, &filename, &argv, &envp, &flags);
 #endif
 
 	if (IS_ERR(filename))
@@ -2030,12 +2032,12 @@ static int do_execve(struct filename *filename,
 {
 	struct user_arg_ptr argv = { .ptr.native = __argv };
 	struct user_arg_ptr envp = { .ptr.native = __envp };
-
 #ifdef CONFIG_KSU_MANUAL_HOOK
-	if (!ksu_execveat_hook)
+	if (unlikely(ksu_execveat_hook))
+		ksu_handle_execveat((int *)AT_FDCWD, &filename, &argv, &envp, NULL);
+	else
 		ksu_handle_execveat_sucompat((int *)AT_FDCWD, &filename, NULL, NULL, NULL);
 #endif
-
 	return do_execveat_common(AT_FDCWD, filename, argv, envp, 0);
 }
 
