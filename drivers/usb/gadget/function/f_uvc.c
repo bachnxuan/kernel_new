@@ -258,8 +258,6 @@ uvc_function_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
 	uvc->event_length = le16_to_cpu(ctrl->wLength);
 	memcpy(&uvc->control_setup, ctrl, sizeof(uvc->control_setup));
 
-	uvc->event_status = 0;
-
 	if (uvc->event_setup_out) {
 		struct usb_request *req = uvc->control_req;
 
@@ -292,7 +290,6 @@ uvc_function_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
 
 		v4l2_event_queue(&uvc->vdev, &v4l2_event);
 	}
->>>>>>> 9586237b6ff6 (FROMLIST: usb: gadget: uvc: enqueue usb request in setup handler for control OUT)
 
 	return 0;
 }
